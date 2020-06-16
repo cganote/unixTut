@@ -21,7 +21,7 @@ echo $?
 cd training
 echo "${start}" >> Description
 mkdir -p joust
-cd joust
+cd joust 
 echo "${joust}" >> Description
 cd ..
 mkdir -p strength
