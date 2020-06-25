@@ -142,6 +142,8 @@ function cdp(){
 #     
 # 	fi
 
+
+
 	if [[ $(basename $PWD) == 'joust' ]]; then
 	echo "ls to look around, and then you can exit."	
 	fi
@@ -155,6 +157,8 @@ function cdp(){
 	if [[ $(basename $PWD) == 'track' ]]; then
 	echo "ls to look around, and then you can exit."	
 	fi
+	
+	
 	
 	# if [[ $(basename $PWD) == 'strength' ]]; then
 # 	echo "You have made it!"
@@ -242,8 +246,6 @@ function cdp(){
 function usb(){
 
 
-	echo -ne '\n'
-
 	if [[ -e Description ]]; then
     fold -sw $(checkColumns) <Description 2>/dev/null
     export test=1
@@ -254,66 +256,56 @@ result="$(\ls $@ 2>&1)"
 echo "Here are the directoy contents:"
 echo "$result"
 
-
-	
-    
-    
-  # 
-# 	if [[ "$result" = Description ]]; then
-# 	echo "ls to look around, and then you can exit."	
-# 	fi
-
 	
   
-
-  	
   	
   	if [[ $(basename $PWD) == 'joust' ]]; then
 	echo "Great Job! Move onward!"
   	let completed_joust=1   #$completed
+  	
+
 	
 	sleep 1
 	echo -ne '\n'
-	
 	fi
+	
     
 	if [[ $(basename $PWD) == 'strength' ]]; then
 	echo "You have made it!"
     #let completed++
     let completed_strength=1 # $completed
+   
 
 	sleep 1
 	echo -ne '\n'
-	
 	fi
 	
-	if [[ $(basename $PWD) == 'track' ]]; then
+	
+	if [[ $(basename $PWD) == 'track' ]]; then 
 	echo "You have finished viewing this room!"
 	let completed_track=1 #$completed
+	
 	sleep 1
 	echo -ne '\n'
+	
 	fi
-	
-	
-	
-	export final_completion=$(($completed_joust+$completed_strength+$completed_track))
-
-	#echo "You have completed: $completed_joust of 3"
-	echo "You have completed: $final_completion of 3"
-	
-	sleep 1
-	echo -ne '\n'
-	
-
 	
 	
 	# After all is said and done, prompt user to a final message.
+	export final_completion=$(($completed_joust+$completed_strength+$completed_track))
+	# by adding if 'result' equals the description, it will count the completion.
+	# putting it in this if-then statement, will assist it to not appear when it lists the results
+	# and it will continue to count the completion after each directory has been entered, and the description has been printed.
 	
-	if [[ $final_completion == 3 ]]; then
-	echo "You have completed $final_completion all of the trainings. Press done to exit"
+	if [[ "$result" = Description ]]; then
+	echo "You have completed: $final_completion of 3"
 	fi
 	
 	
+	if [[ $final_completion == 3 ]]; then
+	sleep 1
+	echo "You have completed $final_completion all of the trainings. Press done to exit"
+	fi
 	
 
 	
