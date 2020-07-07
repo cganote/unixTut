@@ -4,7 +4,8 @@ alias unlock=hint
 alias open=hint
 alias Start=start
 alias cd=cdp
-alias ls=lsp
+alias ls=usb
+alias lsd=cds
 alias less=lessp
 alias flee=escape
 alias search=find
@@ -39,6 +40,13 @@ export b=$'\033[1m'
 export i=$'\033[3m'
 # Shorthand for reset font to normal
 export r=$'\033[0m'
+# Completed variable
+#export completed=1
+export completed_joust=0
+export completed_track=0
+export completed_strength=0
+#export all_done=$final_completion
+
 
 function checkColumns(){
 #    cols=${COLUMNS:-50}
@@ -108,50 +116,202 @@ function cdp(){
     else
 	echo "Something went wrong, try again. Result is $result, exit code is $ec."
     fi
+    
+    #Testing file location, and progress completion indicator
+
+
+   
+   
+    # 
+#     if [[ -e Description ]]; then
+#     fold -sw $(checkColumns) <Description 2>/dev/null
+#     export test=1
+# 	
+#     fi
+#     
+
+	
+	# if [[ $(basename $PWD) == 'joust' ]]; then
+# 	echo "Great Job! Move onward!"
+#   	let completed_joust=1   #$completed
+# 	
+# 	sleep 1
+# 	echo -ne '\n'
+# 	
+#     
+#     
+# 	fi
+
+
+
+	if [[ $(basename $PWD) == 'joust' ]]; then
+	echo "ls to look around, and then you can exit."	
+	fi
+
+  
+    if [[ $(basename $PWD) == 'strength' ]]; then
+	echo "ls to look around, and then you can exit."	
+	fi
+	
+	
+	if [[ $(basename $PWD) == 'track' ]]; then
+	echo "ls to look around, and then you can exit."	
+	fi
+	
+	
+	
+	# if [[ $(basename $PWD) == 'strength' ]]; then
+# 	echo "You have made it!"
+#     #let completed++
+#     let completed_strength=1 # $completed
+# 
+# 	sleep 1
+# 	echo -ne '\n'
+# 	fi
+# 	
+# 	if [[ $(basename $PWD) == 'track' ]]; then
+# 	echo "You have finished viewing this room!"
+# 	let completed_track=1 #$completed
+# 	sleep 1
+# 	echo -ne '\n'
+# 	fi
+	
+
+#  export final_completion=$(($completed_joust+$completed_strength+$completed_track))
+# 
+# 	#echo "You have completed: $completed_joust of 3"
+# 	echo "You have completed: $final_completion of 3"
+# 	
+# 	sleep 1
+# 	echo -ne '\n'
+# 	
+# 	# After all is said and done, prompt user to a final message.
+# 	
+# 	if [[ $final_completion == 3 ]]; then
+# 	echo "You have completed $final_completion all of the trainings. Press done to exit"
+# 	fi
+	
+	
+	
+
 }
 
-function lsp(){
-    curdir=${PWD##*/}   
-    result="$(\ls $@ 2>&1)"
-    #echo "$result"
-    if [[ ! "$result" ]]; then
-	testForEmpty="$(\ls -lah $@ 2>&1)"
-	if [[ "$testForEmpty" = *"Permission"* ]];then
-	    echo "You can't look behind locked doors. Maybe try unlocking it first?"
-	else
-	    num=$(echo "$testForEmpty" | wc -l)	    
-	    if [[ $num > 3 ]]; then
-		echo "There are no doors or obvious items, but maybe there are some secret hiding places in here."
-	    else
-		echo "The room appears empty and bare."
-		#echo " There are $num items."
-	    fi
-	fi
-    elif  [[ "$result" = *"Permission"* ]];then
-	
-	testForEmpty="$(\ls $@ 2>&1)"
-	if [[ ! "$testForEmpty" ]];then
-	    echo "You can't look behind locked doors. Maybe try unlocking it first?"	   
-	else
-	    echo "It's pitch black, you can't see anything!"
-	fi
-    elif  [[ "$result" = *"No such"* ]];then
-	echo "That place doesn't exist. Where exactly are you trying to look? Make sure you have a space after ls and dash if doing "$bold"ls -lah"$normal"."
-    else
-	#cat Description 2>/dev/null	
+
+
+
+# function lsp(){
+#     curdir=${PWD##*/}
+#     result="$(\ls $@ 2>&1)"
+#     echo "$result"
+#     if [[ ! "$result" ]]; then
+# 	testForEmpty="$(\ls -lah $@ 2>&1)"
+#     if [[ "$testForEmpty" = *"Permission"* ]];then
+# 	    echo "You can't look behind locked doors. Maybe try unlocking it first?"
+# 	else
+# 	    num=$(echo "$testForEmpty" | wc -l)
+# 	    if [[ $num > 3 ]]; then
+# 		echo "There are no doors or obvious items, but maybe there are some secret hiding places in here."
+# 	    else
+# 		echo "The room appears empty and bare."
+# 		echo " There are $num items."
+# 	    fi
+# 	fi
+#     elif  [[ "$result" = *"Permission"* ]];then
+# 	
+# 	testForEmpty="$(\ls $@ 2>&1)"
+# 	if [[ ! "$testForEmpty" ]];then
+# 	    echo "You can't look behind locked doors. Maybe try unlocking it first?"
+# 	else
+# 	    echo "It's pitch black, you can't see anything!"
+# 	fi
+#     elif  [[ "$result" = *"No such"* ]];then
+# 	echo "That place doesn't exist. Where exactly are you trying to look? Make sure you have a space after ls and dash if doing "$bold"ls -lah"$normal"."
+#     else
+# 	cat Description 2>/dev/null
+# 	if [[ -e Description ]]; then
+# 	    fold -sw $(checkColumns) <Description 2>/dev/null
+# 	    echo "Checking term... $TERM"
+# 	   
+# 	fi
+# 	if [[ $TERM = 'tty' ]]; then
+# 	    \ls --color=tty $@
+# 	else
+# 	    echo "Here are the directoy contents:"
+# 	    echo "$result"
+# 	    \ls $@
+# 	fi
+#     fi
+#  }   
+   
+function usb(){
+
+
 	if [[ -e Description ]]; then
-	    fold -sw $(checkColumns) <Description 2>/dev/null	
-	    #echo "Checking term... $TERM"
-	fi
-	if [[ $TERM = 'tty' ]]; then
-	    \ls --color=tty $@
-	else
-	    echo "Here are the directoy contents:"
-	    echo "$result"
-	    #\ls $@
-	fi
+    fold -sw $(checkColumns) <Description 2>/dev/null
+    export test=1
     fi
-}
+
+curdir=${PWD##*/}
+result="$(\ls $@ 2>&1)"
+echo "Here are the directoy contents:"
+echo "$result"
+
+	
+  
+  	
+  	if [[ $(basename $PWD) == 'joust' ]]; then
+	echo "Great Job! Move onward!"
+  	let completed_joust=1   #$completed
+  	
+
+	
+	sleep 1
+	echo -ne '\n'
+	fi
+	
+    
+	if [[ $(basename $PWD) == 'strength' ]]; then
+	echo "You have made it!"
+    #let completed++
+    let completed_strength=1 # $completed
+   
+
+	sleep 1
+	echo -ne '\n'
+	fi
+	
+	
+	if [[ $(basename $PWD) == 'track' ]]; then 
+	echo "You have finished viewing this room!"
+	let completed_track=1 #$completed
+	
+	sleep 1
+	echo -ne '\n'
+	
+	fi
+	
+	
+	# After all is said and done, prompt user to a final message.
+	export final_completion=$(($completed_joust+$completed_strength+$completed_track))
+	# by adding if 'result' equals the description, it will count the completion.
+	# putting it in this if-then statement, will assist it to not appear when it lists the results
+	# and it will continue to count the completion after each directory has been entered, and the description has been printed.
+	
+	if [[ "$result" = Description ]]; then
+	echo "You have completed: $final_completion of 3"
+	fi
+	
+	
+	if [[ $final_completion == 3 ]]; then
+	sleep 1
+	echo "You have completed $final_completion all of the trainings. Press done to exit"
+	fi
+	
+
+	
+  
+}  
+
 
 function escape(){
     if [[ -e "$DUNGEON" ]]; then
@@ -170,13 +330,14 @@ function hint(){
 
 function light(){
     if [ "$PS1" ]; then
-        PS1="\[\033[0;95m\]Hero: \$PONYUSER \[\033[0;91m\] You are currently in \$PWD.\n\[\033[0;96m\]Explore all the training areas, then type done to return to menu\[\033[0;92m\] $\[\033[0m\] "
+        PS1="\[\033[0;95m\]Hero: \$PONYUSER \[\033[0;91m\] You are currently in \$PWD.\n\[\033[0;96m\]To explore all the training areas, type ${b}ls${r}. Type done to return to the main menu\[\033[0;92m\] $\[\033[0m\]"
+        
     fi
 }
 
 function dark(){
     if [ "$PS1" ]; then
-        PS1="\[\033[35m\]Hero: \$PONYUSER \[\033[31m\] You are currently in \$PWD.\n\[\033[34m\]Explore all the training areas, then type done to return to menu\[\033[32m\] $\[\033[0m\] "
+        PS1="\[\033[35m\]Hero: \$PONYUSER \[\033[31m\] You are currently in \$PWD.\n\[\033[34m\]To explore all the training areas, type ${b}ls${r}. Type done to return to the main menu\[\033[32m\] $\[\033[0m\]"
     fi
 }
 
